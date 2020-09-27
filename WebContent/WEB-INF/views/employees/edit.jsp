@@ -20,8 +20,8 @@
                 </form>
 
                 <script>
-                    function confirmDestro() {
-                        if (confitm("本当に削除してよろしいですか？")) {
+                    function confirmDestroy() {
+                        if (confirm("本当に削除してよろしいですか？")) {
                             document.forms[1].submit();
                         }
                     }
