@@ -2,23 +2,35 @@ package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table(name = "authorities")
+
+@NamedQueries({
+    @NamedQuery(
+            // 全ての役職をデータベースから取得
+            name = "getAllAuthorities",
+            query = "SELECT a FROM Authority a"
+            ),
+    @NamedQuery(
+            // setParameterでセットされた:nameとデータベースに保存されているa.nameが等しい役職データをデータベースから取得
+            name = "getAuthority",
+            query = "SELECT a FROM Authority AS a WHERE a.name = :name"
+            )
+})
 
 @Entity
 public class Authority {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "authority", nullable = false)
-    private String authority;
+    @Column(name = "name", nullable = false)
+    private String name;
 
 
     public Integer getId() {
@@ -29,12 +41,12 @@ public class Authority {
         this.id = id;
     }
 
-    public String getAuthority() {
-        return authority;
+    public String getName() {
+        return name;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

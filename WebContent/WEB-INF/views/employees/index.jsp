@@ -14,15 +14,20 @@
         <table id="employee_list">
             <tbody>
                 <tr>
+                    <th>部署</th>
+                    <th>役職</th>
                     <th>社員番号</th>
                     <th>氏名</th>
                     <th>操作</th>
                 </tr>
                 <c:forEach var="employee" items="${employees}" varStatus="status">
                     <tr class="row${status.count % 2}">
+                        <td><c:out value="${employee.department.name}" /></td>
+                        <td><c:out value="${employee.authority.name}" /></td>
                         <td><c:out value="${employee.code}" /></td>
                         <td><c:out value="${employee.name}" /></td>
-                        <td><c:choose>
+                        <td>
+                            <c:choose>
                                 <c:when test="${employee.delete_flag == 1}">
                                     （削除済み）
                                 </c:when>
@@ -30,7 +35,8 @@
                                 <c:otherwise>
                                     <a href="<c:url value='/employees/show?id=${employee.id}' />">詳細を表示</a>
                                 </c:otherwise>
-                            </c:choose></td>
+                            </c:choose>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
@@ -38,16 +44,14 @@
 
         <div id="pagination">
             （全 ${employees_count} 件） <br />
-            <c:forEach var="i" begin="1"
-                end="${((employees_count - 1) / 15) + 1}" step="1">
+            <c:forEach var="i" begin="1" end="${((employees_count - 1) / 15) + 1}" step="1">
                 <c:choose>
                     <c:when test="${i == page}">
                         <c:out value="${i}" />&nbsp;
                     </c:when>
 
                     <c:otherwise>
-                        <a href="<c:url value='/employees/index?page=${i}' />"><c:out
-                                value="${i}" /></a>&nbsp;
+                        <a href="<c:url value='/employees/index?page=${i}' />"><c:out value="${i}" /></a>&nbsp;
                     </c:otherwise>
                 </c:choose>
             </c:forEach>

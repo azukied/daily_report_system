@@ -15,18 +15,22 @@ import javax.persistence.Table;
 
 @Table(name = "employees")
 @NamedQueries({
+    // すべての従業員情報を取得
     @NamedQuery(
             name = "getAllEmployees",
             query = "SELECT e FROM Employee AS e ORDER BY e.id DESC"
             ),
+    // 従業員情報の全件数を取得
     @NamedQuery(
             name = "getEmployeesCount",
             query = "SELECT COUNT(e) FROM Employee AS e"
             ),
+    // 指定された社員番号がすでにデータベースに存在しているかを調べる。
     @NamedQuery(
             name = "checkRegisteredCode",
             query = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :code"
             ),
+    // 従業員がログインするときに社員番号とパスワードが正しいかをチェックする。
     @NamedQuery(
             name = "checkLoginCodeAndPassword",
             query = "SELECT e FROM Employee AS e WHERE e.delete_flag = 0 AND e.code = :code AND e.password = :pass"
@@ -38,16 +42,17 @@ public class Employee {
 
     @Id
     @Column(name = "id")
+    // 主キー値を自動採番する。
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false, unique = true)    // 「unique = true」：一意制約
     private String code;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "password", length = 64, nullable = false)
+    @Column(name = "password", length = 64, nullable = false)    // 入力可能文字情報：最大64文字　SHA256 により、どんな文字数の文字列でも必ず、64文字のハッシュ化された文字列にされる。
     private String password;
 
     @Column(name = "admin_flag", nullable = false)
@@ -63,12 +68,12 @@ public class Employee {
     private Integer delete_flag;
 
     @ManyToOne
-    @JoinColumn(name = "authority_id", nullable = false)
-    private Authority authority;
-
-    @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "authority_id", nullable = false)
+    private Authority authority;
 
 
     public Integer getId() {
@@ -135,20 +140,20 @@ public class Employee {
         this.delete_flag = delete_flag;
     }
 
-    public Authority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
-
     public Department getDepartment() {
         return department;
     }
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public Authority getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(Authority authority) {
+        this.authority = authority;
     }
 
 }

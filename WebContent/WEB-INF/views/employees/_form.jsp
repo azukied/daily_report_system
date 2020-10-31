@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:if test="${erroes != null}">
+<c:if test="${errors != null}">
     <div id="flush_error">
         入力内容にエラーがあります。<br />
         <c:forEach var="error" items="${errors}">
@@ -11,34 +11,57 @@
     </div>
 </c:if>
 
+<label for="department">部署</label>
+<br />
+<select name="departmentName" id="department">
+    <c:forEach var="department" items="${departments}">
+        <option value="${department.name}" <c:if test="${department.name == employee.department.name}">selected</c:if>>
+            <c:out value="${department.name}" />
+        </option>
+    </c:forEach>
+</select>
+<br />
+<br />
+
+<label for="authority">役職</label>
+<br />
+<select name="authorityName" id="authority">
+    <c:forEach var="authority" items="${authorities}">
+        <option value="${authority.name}" <c:if test="${authority.name == employee.authority.name}">selected</c:if>>
+            <c:out value="${authority.name}" />
+        </option>
+    </c:forEach>
+</select>
+<br />
+<br />
+
 <label for="code">社員番号</label>
 <br />
-<input type="text" name="code" value="${employee.code}" />
+<input type="text" name="code" id="code" value="${employee.code}" />
 <br />
 <br />
 
 <label for="name">氏名</label>
 <br />
-<input type="text" name="name" value="${employee.name}" />
+<input type="text" name="name" id="name" value="${employee.name}" />
 <br />
 <br />
 
 <label for="password">パスワード</label>
 <br />
-<input type="password" name="password" />
+<input type="password" name="password" id="password" />
 <br />
 <br />
 
 <label for="admin_flag">権限</label>
 <br />
-<select name="admin_flag">
-    <option value="0"
-        <c:if test="${employee.admin_flag == 0}"> selected</c:if>>一般</option>
-    <option value="1"
-        <c:if test="${employee.admin_flag == 1}"> selected</c:if>>管理者</option>
+<select name="admin_flag" id="admin_flag">
+    <option value="0" <c:if test="${employee.admin_flag == 0}">selected</c:if>>一般</option>
+    <option value="1" <c:if test="${employee.admin_flag == 1}">selected</c:if>>管理者</option>
 </select>
 <br />
 <br />
 
 <input type="hidden" name="_token" value="${_token}" />
+
 <button type="submit">登録</button>

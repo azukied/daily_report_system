@@ -36,13 +36,17 @@ public class EmployeesIndexServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
         int page = 1;
+
         try {
             page = Integer.parseInt(request.getParameter("page"));
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) { }
+        List<Employee> employees = em.createNamedQuery("getAllEmployees", Employee.class)
+                                      .setFirstResult(15 * (page - 1))
+                                      .setMaxResults(15)
+                                      .getResultList();
 
-        List<Employee> employees = em.createNamedQuery("getAllEmployees", Employee.class).setFirstResult(15 * (page - 1)).setMaxResults(15).getResultList();
-
-        long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class).getSingleResult();
+        long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class)
+                                         .getSingleResult();
 
         em.close();
 

@@ -35,6 +35,11 @@ import javax.persistence.Table;
             )
 })
 
+
+
+
+
+
 @Entity
 public class Report {
 

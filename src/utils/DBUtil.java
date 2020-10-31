@@ -6,6 +6,8 @@ import javax.persistence.Persistence;
 
 public class DBUtil {
 
+    // Hibernateに接続するための「おまじない」
+
     private static final String PERSISTENCE_UNIT_NAME = "daily_report_system";
     private static EntityManagerFactory emf;
 
@@ -20,5 +22,5 @@ public class DBUtil {
 
         return emf;
     }
-    
+
 }

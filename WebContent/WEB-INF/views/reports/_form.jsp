@@ -28,4 +28,7 @@
 <br /><br />
 
 <input type="hidden" name="_token" value="${_token}" />
+
+<input type="hidden" name="approval_flag" value="0" />
+
 <button type="submit">投稿</button>

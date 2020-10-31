@@ -1,4 +1,4 @@
-package controllers.employees;
+package controllers.approval;
 
 import java.io.IOException;
 
@@ -10,20 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Employee;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class EmployeesShowServlet
+ * Servlet implementation class ApprovalServlet
  */
-@WebServlet("/employees/show")
-public class EmployeesShowServlet extends HttpServlet {
+@WebServlet("/approval")
+public class ApprovalServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeesShowServlet() {
+    public ApprovalServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,15 +33,9 @@ public class EmployeesShowServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EntityManager em = DBUtil.createEntityManager();
 
-        // 該当のIDの従業員データ1件のみをデータベースから取得
-        Employee e = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
+        // 未承認の日報のみデータベースから取得
 
-        em.close();
-
-        // 従業員データをリクエストスコープにセットしてshow.jspを呼び出す。
-        request.setAttribute("employee", e);
-
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/show.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/unapproved_reports.jsp");
         rd.forward(request, response);
     }
 

@@ -36,15 +36,17 @@ public class EmployeesDestroyServlet extends HttpServlet {
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
+            // セッションスコープから従業員のIDを取得して、該当のIDの従業員データ1件のみをデータベースから取得
             Employee e = em.find(Employee.class, (Integer)(request.getSession().getAttribute("employee_id")));
-            e.setDelete_flag(1);
+            e.setDelete_flag(1);    // 論理削除：destroy した従業員情報は削除したとみなしてシステム上で扱うことにして、従業員情報そのものはデータベースへ残す。
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
-            em.getTransaction().begin();
+            em.getTransaction().begin();    // 論理削除をするためremoveメソッドは使わない。
             em.getTransaction().commit();
             em.close();
             request.getSession().setAttribute("flush", "削除が完了しました。");
 
+            // indexページへリダイレクト
             response.sendRedirect(request.getContextPath() + "/employees/index");
         }
     }

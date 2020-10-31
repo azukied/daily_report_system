@@ -38,6 +38,10 @@
                 <c:if test="${sessionScope.login_employee.id == report.employee.id}">
                     <p><a href="<c:url value='/reports/edit?id=${report.id}' />">この日報を編集する</a></p>
                 </c:if>
+
+                <form method="POST" action="<c:url value='/reports/approval' />">
+                    <button type="submit">承認</button>
+                </form>
             </c:when>
 
             <c:otherwise>

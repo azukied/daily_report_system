@@ -11,6 +11,16 @@
                 <table>
                     <tbody>
                         <tr>
+                            <th>部署</th>
+                            <td><c:out value="${employee.department.name}" /></td>
+                        </tr>
+                        <tr>
+                        <tr>
+                            <th>役職</th>
+                            <td><c:out value="${employee.authority.name}" /></td>
+                        </tr>
+                        <tr>
+                        <tr>
                             <th>社員番号</th>
                             <td><c:out value="${employee.code}" /></td>
                         </tr>
