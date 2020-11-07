@@ -3,6 +3,7 @@
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
+        <!-- エラーメッセージはhasErrorという変数がリクエストスコープにtrueでセットされていれば表示する。 -->
         <c:if test="${hasError}">
             <div id="flush_error">社員番号かパスワードが間違っています。</div>
         </c:if>

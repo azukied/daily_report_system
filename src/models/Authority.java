@@ -10,13 +10,13 @@ import javax.persistence.Table;
 @Table(name = "authorities")
 
 @NamedQueries({
+    // 全ての役職をデータベースから取得
     @NamedQuery(
-            // 全ての役職をデータベースから取得
             name = "getAllAuthorities",
             query = "SELECT a FROM Authority a"
             ),
+    // setParameterでセットされた:nameとデータベースに保存されているa.nameが等しい役職データをデータベースから取得
     @NamedQuery(
-            // setParameterでセットされた:nameとデータベースに保存されているa.nameが等しい役職データをデータベースから取得
             name = "getAuthority",
             query = "SELECT a FROM Authority AS a WHERE a.name = :name"
             )

@@ -16,11 +16,14 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table(name = "reports")
+
 @NamedQueries({
+    // すべての日報情報を取得
     @NamedQuery(
             name = "getAllReports",
             query = "SELECT r FROM Report AS r ORDER BY r.id DESC"
             ),
+    // 日報情報の全件数を取得
     @NamedQuery(
             name = "getReportsCount",
             query = "SELECT COUNT(r) FROM Report AS r"
@@ -32,13 +35,28 @@ import javax.persistence.Table;
     @NamedQuery(
             name = "getMyReportsCount",
             query = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :employee"
+            ),
+    // 未承認の日報情報を取得
+    @NamedQuery(
+            name = "getUnapprovedReports",
+            query = "SELECT r FROM Report AS r WHERE r.approval_flag = 0 ORDER BY r.id DESC"
+            ),
+    // 承認済みの日報情報を取得
+    @NamedQuery(
+            name = "getApprovedReports",
+            query = "SELECT r FROM Report AS r WHERE r.approval_flag = 1 ORDER BY r.id DESC"
+            ),
+    // 未承認の日報情報の全件数を取得
+    @NamedQuery(
+            name = "getUnapprovedReportsCount",
+            query = "SELECT COUNT(r) FROM Report AS r WHERE r.approval_flag = 0"
+            ),
+    // 承認済みの日報情報の全件数を取得
+    @NamedQuery(
+            name = "getApprovedReportsCount",
+            query = "SELECT COUNT(r) FROM Report AS r WHERE r.approval_flag = 1"
             )
 })
-
-
-
-
-
 
 @Entity
 public class Report {
@@ -51,27 +69,27 @@ public class Report {
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
-    
+
     @Column(name = "report_date", nullable = false)
-    private Date report_date;
-    
+    private Date report_date;    // 年月日
+
     @Column(name = "title", length = 255, nullable = false)
     private String title;
-    
-    @Lob
+
+    @Lob    // テキストエリアの指定
     @Column(name = "content", nullable = false)
     private String content;
-    
+
     @Column(name = "created_at", nullable = false)
-    private Timestamp created_at;
-    
+    private Timestamp created_at;    // 年月日 + 時分秒
+
     @Column(name = "updated_at", nullable = false)
-    private Timestamp updated_at;
-    
+    private Timestamp updated_at;    // 年月日 + 時分秒
+
     @Column(name = "approval_flag", nullable = false)
     private Integer approval_flag;
 
-    
+
     public Integer getId() {
         return id;
     }

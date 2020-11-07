@@ -4,6 +4,7 @@
 
 <c:import url="../layout/app.jsp">
     <c:param name="content">
+        <!-- フラッシュメッセージがセットされていたら、そのメッセージを表示 -->
         <c:if test="${flush != null}">
             <div id="flush_success">
                 <c:out value="${flush}"></c:out>
@@ -49,6 +50,5 @@
         </div>
 
         <p><a href="<c:url value='/reports/new' />">新規日報の登録</a></p>
-        <p><a href="<c:url value='/reports/unapproved_reports' />">未承認日報一覧</a></p>
     </c:param>
 </c:import>

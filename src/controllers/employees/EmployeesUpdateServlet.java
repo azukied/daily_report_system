@@ -39,6 +39,8 @@ public class EmployeesUpdateServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String _token = (String)request.getParameter("_token");
+
+        // CSRF対策のチェックを実行
         if (_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
@@ -85,11 +87,13 @@ public class EmployeesUpdateServlet extends HttpServlet {
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));    // 更新日時のみ上書き
             e.setDelete_flag(0);
 
+            // バリデーションを実行してエラーがあったら編集画面のフォームに戻る。
             List<String> errors = EmployeeValidator.validate(e, code_duplicate_check_flag, password_check_flag);
             if (errors.size() > 0) {
                 // 入力内容にエラーがあったらそれを返す。
                 em.close();
 
+                // フォームに初期値を設定し、さらにエラーメッセージを送る。
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("employee", e);
                 request.setAttribute("errors", errors);

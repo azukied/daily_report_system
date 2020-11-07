@@ -42,6 +42,7 @@
             </tbody>
         </table>
 
+        <!-- ページネーション -->
         <div id="pagination">
             （全 ${employees_count} 件） <br />
             <c:forEach var="i" begin="1" end="${((employees_count - 1) / 15) + 1}" step="1">

@@ -29,6 +29,7 @@
 
 <input type="hidden" name="_token" value="${_token}" />
 
+<!-- 初めに日報を投稿（提出）するときは、必ずapproval_flagが0であるため、未承認状態で登録される。 -->
 <input type="hidden" name="approval_flag" value="0" />
 
 <button type="submit">投稿</button>

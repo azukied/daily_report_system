@@ -14,6 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table(name = "employees")
+
 @NamedQueries({
     // すべての従業員情報を取得
     @NamedQuery(

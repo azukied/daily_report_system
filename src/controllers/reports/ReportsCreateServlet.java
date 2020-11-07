@@ -38,13 +38,17 @@ public class ReportsCreateServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String _token = (String)request.getParameter("_token");
+
+        // CSRF対策のチェックを実行
         if (_token != null && _token.equals(request.getSession().getId())) {
+            // new.jspのフォームから受け取ったデータをセットする。
             EntityManager em = DBUtil.createEntityManager();
 
             Report r = new Report();
 
             r.setEmployee((Employee)request.getSession().getAttribute("login_employee"));
 
+            // 日付欄をわざと未入力にした場合、当日の日付を入れるようにしている。
             Date report_date = new Date(System.currentTimeMillis());
             String rd_str = request.getParameter("report_date");
             if (rd_str != null && !rd_str.equals("")) {
@@ -59,12 +63,16 @@ public class ReportsCreateServlet extends HttpServlet {
             r.setCreated_at(currentTime);
             r.setUpdated_at(currentTime);
 
+            // 初めに日報を投稿（提出）するときは、必ずapproval_flagが0であるため、未承認状態で登録される。
             r.setApproval_flag(Integer.parseInt(request.getParameter("approval_flag")));
 
+            // バリデーションを実行してエラーがあったら新規登録のフォームに戻る。
             List<String> errors = ReportValidator.validate(r);
             if (errors.size() > 0) {
+                // 入力内容にエラーがあったらそれを返す。
                 em.close();
 
+                // フォームに初期値を設定、さらにエラーメッセージを送る。
                 request.setAttribute("_token", request.getSession().getId());
                 request.setAttribute("report", r);
                 request.setAttribute("errors", errors);
@@ -72,12 +80,15 @@ public class ReportsCreateServlet extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/new.jsp");
                 rd.forward(request, response);
             } else {
+                // エラーがなければデータベースに保存する。
                 em.getTransaction().begin();
-                em.persist(r);
-                em.getTransaction().commit();
+                em.persist(r);    // データベースに保存
+                em.getTransaction().commit();    // データの新規登録を確定
                 em.close();
+
                 request.getSession().setAttribute("flush", "登録が完了しました。");
 
+                // indexページにリダイレクト
                 response.sendRedirect(request.getContextPath() + "/reports/index");
             }
         }

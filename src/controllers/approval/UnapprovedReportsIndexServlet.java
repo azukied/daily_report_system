@@ -1,4 +1,4 @@
-package controllers.employees;
+package controllers.approval;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,20 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import models.Employee;
+import models.Report;
 import utils.DBUtil;
 
 /**
- * Servlet implementation class EmployeesIndexServlet
+ * Servlet implementation class ApprovalIndexServlet
  */
-@WebServlet("/employees/index")
-public class EmployeesIndexServlet extends HttpServlet {
+@WebServlet("/unapproved/reports/index")
+public class UnapprovedReportsIndexServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EmployeesIndexServlet() {
+    public UnapprovedReportsIndexServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,27 +36,29 @@ public class EmployeesIndexServlet extends HttpServlet {
         EntityManager em = DBUtil.createEntityManager();
 
         // ページネーション
-        // 開くページ数を取得（デフォルトは1ページ目）
-        int page = 1;
+        // 開くページ数を取得
+        int page;
 
         try {
             page = Integer.parseInt(request.getParameter("page"));
-        } catch (NumberFormatException e) { }
+        } catch (Exception e) {
+            page = 1;
+        }
 
-        // 最大件数と開始位置を指定して従業員データを取得
-        List<Employee> employees = em.createNamedQuery("getAllEmployees", Employee.class)
-                                      .setFirstResult(15 * (page - 1))    // 何件目からデータを取得するか。（配列と同じ0番目から数える。）
-                                      .setMaxResults(15)    // データの最大取得件数
-                                      .getResultList();
+        // 最大件数と開始位置を指定して未承認の日報データを取得
+        List<Report> reports = em.createNamedQuery("getUnapprovedReports", Report.class)
+                                  .setFirstResult(15 * (page - 1))
+                                  .setMaxResults(15)
+                                  .getResultList();
 
-        // 全件数を取得
-        long employees_count = (long)em.createNamedQuery("getEmployeesCount", Long.class)
-                                         .getSingleResult();
+        // 未承認の日報の件数を取得
+        long reports_count = (long)em.createNamedQuery("getUnapprovedReportsCount", Long.class)
+                                       .getSingleResult();
 
         em.close();
 
-        request.setAttribute("employees", employees);
-        request.setAttribute("employees_count", employees_count);    // 全件数
+        request.setAttribute("reports", reports);    // 全日報データ
+        request.setAttribute("reports_count", reports_count);    // 全件数
         request.setAttribute("page", page);    // ページ数
 
         // フラッシュメッセージがセッションスコープにセットされていたら、リクエストスコープに保存（セッションスコープからは削除）
@@ -65,7 +67,7 @@ public class EmployeesIndexServlet extends HttpServlet {
             request.getSession().removeAttribute("flush");
         }
 
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/index.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/unapprovedReports/index.jsp");
         rd.forward(request, response);
     }
 
