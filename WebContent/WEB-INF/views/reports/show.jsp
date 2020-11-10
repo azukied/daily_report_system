@@ -40,18 +40,15 @@
                     <p><a href="<c:url value='/reports/edit?id=${report.id}' />">この日報を編集する</a></p>
                 </c:if>
 
-                <c:choose>
-                    <%-- もしログイン者が管理者(id:1)だったら、承認ボタンを必ず表示 --%>
-                    <%-- ログイン者と日報作成者の所属が同じ、かつログイン者が部長(id:2)、かつ日報作成者が課長(id:3)の場合のみ承認ボタンを表示 --%>
-                    <%-- ログイン者と日報作成者の所属が同じ、かつログイン者が課長(id:3)、かつ日報作成者が平社員(id:0)の場合のみ承認ボタンを表示 --%>
-                    <c:when test="${sessionScope.login_employee.authority.id == 1 || (sessionScope.login_employee.department.id == report.employee.department.id && ((sessionScope.login_employee.authority.id == 2 && report.employee.authority.id == 3) || (sessionScope.login_employee.authority.id == 3 && report.employee.authority.id == 0)))}">
-                        <form method="POST" action="<c:url value='/unapproved/reports/update?id=${report.id}' />">
-                            <button type="submit">承認</button>
-                        </form>
-                    </c:when>
-
-                    <c:otherwise></c:otherwise>
-                </c:choose>
+                <%-- 日報が未承認状態のときのみ、承認ボタンを表示 --%>
+                <%-- もしログイン者が管理者(id:1)だったら、承認ボタンを必ず表示 --%>
+                <%-- ログイン者と日報作成者の所属が同じ、かつログイン者が部長(id:2)、かつ日報作成者が課長(id:3)の場合のみ承認ボタンを表示 --%>
+                <%-- ログイン者と日報作成者の所属が同じ、かつログイン者が課長(id:3)、かつ日報作成者が平社員(id:0)の場合のみ承認ボタンを表示 --%>
+                <c:if test="${report.approval_flag == 0 && (sessionScope.login_employee.authority.id == 1 || (sessionScope.login_employee.department.id == report.employee.department.id && ((sessionScope.login_employee.authority.id == 2 && report.employee.authority.id == 3) || (sessionScope.login_employee.authority.id == 3 && report.employee.authority.id == 0))))}">
+                    <form method="POST" action="<c:url value='/unapproved/reports/update?id=${report.id}' />">
+                        <button type="submit">承認</button>
+                    </form>
+                </c:if>
             </c:when>
 
             <c:otherwise>
